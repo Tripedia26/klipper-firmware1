@@ -26,36 +26,15 @@ jobs:
           
           # MKS Robin E3D v1.1 için Klipper make menuconfig ayarları
           cat > .config << EOF
-          CONFIG_LOW_LEVEL_OPTIONS=y
-          CONFIG_MACH_STM32=y
-          CONFIG_BOARD_DIRECTORY="stm32"
           CONFIG_MCU="stm32f103xe"
-          CONFIG_USB_VENDOR_ID=0x1d50
-          CONFIG_USB_PRODUCT_ID=0x614e
           CONFIG_STM32_FLASH_START_OFFSET=0x5000
-          CONFIG_INLINE_STEPPER_HACK=y
-          CONFIG_HAVE_STEPPER_OPTIMIZED_BOTH_EDGE=y
-          CONFIG_WANT_STEPPER_OPTIMIZED_BOTH_EDGE=y
-          CONFIG_INITIAL_PINS=""
-          CONFIG_HAVE_GPIO=y
-          CONFIG_HAVE_GPIO_ADC=y
-          CONFIG_HAVE_GPIO_SPI=y
-          CONFIG_HAVE_GPIO_I2C=y
-          CONFIG_HAVE_GPIO_HARD_PWM=y
-          CONFIG_HAVE_STRICT_TIMING=y
-          CONFIG_HAVE_CHIPID=y
-          CONFIG_HAVE_BOOTLOADER_REQUEST=y
           CONFIG_SERIAL_PORT_USB=y
           EOF
           
           # Derleme
           make olddefconfig
           make
-
-      - name: Convert klipper.bin to Robin_e3.bin
-        run: |
-          cd klipper
-          ./scripts/update_mks_robin.py out/klipper.bin out/Robin_e3.bin
+          mv out/klipper.bin out/Robin_e3.bin
 
       - name: Upload Firmware to Artifacts
         uses: actions/upload-artifact@v4
