@@ -24,13 +24,12 @@ jobs:
           git clone https://github.com/Klipper3d/klipper.git --depth=1
           cd klipper
           
-          # Varsayılan konfigürasyonu oluştur
-          make olddefconfig
-          
-          # Doğru işlemciyi ve flaş ofsetini doğrudan dosyaya yazarak hata olasılığını ortadan kaldır
-          sed -i 's/^# CONFIG_MCU is not set/CONFIG_MCU="stm32f103xe"/' .config
-          sed -i 's/^# CONFIG_STM32_FLASH_START_OFFSET is not set/CONFIG_STM32_FLASH_START_OFFSET=0x5000/' .config
-          sed -i 's/^# CONFIG_SERIAL_PORT_USB is not set/CONFIG_SERIAL_PORT_USB=y/' .config
+          # Doğru konfigürasyonu doğrudan dosyaya yazarak hata olasılığını ortadan kaldır
+          cat > .config << EOF
+          CONFIG_MCU="stm32f103xe"
+          CONFIG_STM32_FLASH_START_OFFSET=0x5000
+          CONFIG_SERIAL_PORT_USB=y
+          EOF
           
           # Derleme
           make
