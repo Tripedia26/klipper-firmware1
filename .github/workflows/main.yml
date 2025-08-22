@@ -23,7 +23,7 @@ jobs:
         run: |
           git clone https://github.com/Klipper3d/klipper.git --depth=1
           cd klipper
-          
+
           # MKS Robin E3D v1.1 için Klipper make menuconfig ayarları
           # Doğru işlemci (STM32F103) ve bootloader ayarları
           cat > .config << EOF
@@ -47,7 +47,7 @@ jobs:
           CONFIG_HAVE_CHIPID=y
           CONFIG_HAVE_BOOTLOADER_REQUEST=y
           EOF
-          
+
           # Derleme öncesi temizlik ve derleme
           make olddefconfig
           make clean
