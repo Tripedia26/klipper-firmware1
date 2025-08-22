@@ -25,17 +25,15 @@ jobs:
           cd klipper
           
           # MKS Robin E3D v1.1 için Klipper make menuconfig ayarları
-          # Bu ayarlar LPC1768 işlemcisi ve bootloader için kritiktir.
-          # Doğru derleyiciyi seçmesini sağlamak için gerekli tüm ayarları içerir.
+          # Doğru işlemci (STM32F103) ve bootloader ayarları
           cat > .config << EOF
-          CONFIG_MCU="lpc1768"
-          CONFIG_LPC176X_BOOTLOADER_SIZE=20480
-          CONFIG_LPC176X_USB_SERIAL_CFG=y
-          CONFIG_LPC176X_USB_DFU_CFG=y
+          CONFIG_MCU="stm32f103xe"
+          CONFIG_STM32_FLASH_START_OFFSET=0x5000
+          CONFIG_STM32_CLOCK_REF_FREQ=8
+          CONFIG_STM32F1_USB_PORT=
           CONFIG_USB_VENDOR_ID=0x1d50
           CONFIG_USB_PRODUCT_ID=0x614e
           CONFIG_SERIAL=
-          CONFIG_FLASH_BOOT_OFFSET=
           CONFIG_INLINE_STEPPER_HACK=y
           CONFIG_HAVE_STEPPER_OPTIMIZED_BOTH_EDGE=y
           CONFIG_WANT_STEPPER_OPTIMIZED_BOTH_EDGE=y
