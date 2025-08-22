@@ -1,0 +1,53 @@
+name: MKS Robin E3D Firmware Build
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Build Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git build-essential
+
+      - name: Configure and Build Klipper Firmware
+        run: |
+          git clone https://github.com/Klipper3d/klipper.git --depth=1
+          cd klipper
+
+          # MKS Robin E3D v1.1 için Klipper make menuconfig ayarları
+          # Bu ayarlar LPC1768 işlemcisi ve bootloader için kritiktir.
+          cat > .config << EOF
+          CONFIG_MCU="lpc1768"
+          CONFIG_LPC176X_BOOTLOADER_SIZE=20480
+          CONFIG_LPC176X_USB_SERIAL_CFG=y
+          CONFIG_USB_VENDOR_ID=0x1d50
+          CONFIG_USB_PRODUCT_ID=0x614e
+          CONFIG_SERIAL=
+          CONFIG_FLASH_BOOT_OFFSET=
+          EOF
+
+          # Derleme öncesi temizlik ve derleme
+          make olddefconfig
+          make clean
+          make
+
+      - name: Convert klipper.bin to Robin_e3.bin
+        run: |
+          cd klipper
+          ./scripts/update_mks_robin.py out/klipper.bin out/Robin_e3.bin
+
+      - name: Upload Firmware to Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Robin_e3-firmware
+          path: klipper/out/Robin_e3.bin
