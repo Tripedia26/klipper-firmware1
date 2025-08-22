@@ -23,14 +23,14 @@ jobs:
         run: |
           git clone https://github.com/Klipper3d/klipper.git --depth=1
           cd klipper
-
+          
           # MKS Robin E3D v1.1 için Klipper make menuconfig ayarları
           # Doğru işlemci (STM32F103) ve bootloader ayarları
           cat > .config << EOF
           CONFIG_MCU="stm32f103xe"
+          CONFIG_STM32F1_USB_PORT=
           CONFIG_STM32_FLASH_START_OFFSET=0x5000
           CONFIG_STM32_CLOCK_REF_FREQ=8
-          CONFIG_STM32F1_USB_PORT=
           CONFIG_USB_VENDOR_ID=0x1d50
           CONFIG_USB_PRODUCT_ID=0x614e
           CONFIG_SERIAL=
@@ -47,12 +47,11 @@ jobs:
           CONFIG_HAVE_CHIPID=y
           CONFIG_HAVE_BOOTLOADER_REQUEST=y
           EOF
-
+          
           # Derleme öncesi temizlik ve derleme
           make olddefconfig
-          make clean
           make
-
+          
       - name: Convert klipper.bin to Robin_e3.bin
         run: |
           cd klipper
