@@ -51,6 +51,7 @@ jobs:
           CONFIG_SERIAL_PORT_USB=y
           CONFIG_STM32_HAL_DRIVER=y
           CONFIG_STM32_HAL_VERSION="v1.8.4"
+          CONFIG_FLASH_BOOTLOADER_SIZE=0x5000
           EOF
           
           # Derleme konfigürasyonunu oluşturmak için Klipper'ın dahili aracını kullan.
