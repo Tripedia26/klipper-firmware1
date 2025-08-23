@@ -22,8 +22,8 @@ jobs:
       - name: Configure and Build Klipper Firmware
         run: |
           # "--recursive" komutu, tüm alt depoları (submodule'ları) otomatik olarak klonlar.
-          # Bu, "stm32cubef1" kütüphanesini doğru şekilde indirecektir.
-          git clone --recursive https://github.com/Klipper3d/klipper.git --depth=1
+          # "--depth=1" bayrağını kaldırdık, böylece tüm submodule'lar doğru şekilde klonlanacaktır.
+          git clone --recursive https://github.com/Klipper3d/klipper.git
           cd klipper
           
           # Doğru konfigürasyonu doğrudan dosyaya yazarak hata olasılığını ortadan kaldır
