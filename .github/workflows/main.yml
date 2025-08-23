@@ -21,10 +21,13 @@ jobs:
 
       - name: Configure and Build Klipper Firmware
         run: |
-          # --recursive komutu, tüm alt depoları (submodule'ları) otomatik olarak klonlar.
-          # Bu, "stm32cubef1" hatasını çözecektir.
-          git clone --recursive https://github.com/Klipper3d/klipper.git --depth=1
+          git clone https://github.com/Klipper3d/klipper.git --depth=1
           cd klipper
+          
+          # Gerekli STM32 kütüphanesini manuel olarak indir ve Klipper klasörüne taşı.
+          # Bu, "stm32f1xx.h" hatasını kesin olarak çözecektir.
+          wget https://github.com/STMicroelectronics/STM32CubeF1/archive/refs/tags/v1.8.4.tar.gz -O - | tar -xz -C lib/
+          mv lib/STM32CubeF1-1.8.4 lib/stm32cubef1
           
           # Doğru konfigürasyonu doğrudan dosyaya yazarak hata olasılığını ortadan kaldır
           cat > .config << EOF
