@@ -22,12 +22,13 @@ jobs:
       - name: Configure and Build Klipper Firmware
         run: |
           # "--recursive" komutu, tüm alt depoları (submodule'ları) otomatik olarak klonlar.
-          # "--depth=1" bayrağını kaldırdık, böylece tüm submodule'lar doğru şekilde klonlanacaktır.
           git clone --recursive https://github.com/Klipper3d/klipper.git
           cd klipper
           
-          # Doğru konfigürasyonu doğrudan dosyaya yazarak hata olasılığını ortadan kaldır
-          # make olddefconfig komutu ile derleme için gerekli tüm ayarları tamamlayacağız.
+          # Mevcut .config dosyasını silerek temiz bir başlangıç yapın.
+          rm -f .config
+          
+          # Doğru konfigürasyonu doğrudan dosyaya yazın
           cat > .config << EOF
           CONFIG_LOW_LEVEL_OPTIONS=y
           CONFIG_MACH_STM32=y
@@ -54,11 +55,15 @@ jobs:
           CONFIG_FLASH_BOOTLOADER_SIZE=0x2000
           EOF
           
-          # Derleme konfigürasyonunu oluşturmak için Klipper'ın dahili aracını kullan.
+          # Derleme konfigürasyonunu oluşturmak için Klipper'ın dahili aracını kullanın.
           make olddefconfig
           
           # Derleme
           make
+          
+          # Oluşturulan dosyanın boyutunu kontrol edin. Bu, logda görünür olacaktır.
+          ls -lh out/klipper.bin
+          
           mv out/klipper.bin out/Robin_e3.bin
 
       - name: Upload Firmware to Artifacts
